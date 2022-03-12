@@ -1,12 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-import React from 'react';
+import React, {useState} from "react";
 import type {Node} from 'react';
 import {
   SafeAreaView,
@@ -20,11 +12,10 @@ import {
 
 import {
   Colors,
-  DebugInstructions,
   Header,
-  LearnMoreLinks,
-  ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import Welcome from "./views/Welcome";
+import Giggle from "./views/Giggle";
 
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -52,38 +43,54 @@ const Section = ({children, title}): Node => {
   );
 };
 
+const PhaseView: (phase: number) => Node = (phase) => {
+  switch (phase) {
+    case 1:
+    default:
+      return
+  }
+}
+
 const App: () => Node = () => {
+  const [phase, setPhase] = useState(1);
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+  switch (phase) {
+    case 1:
+    default:
+      return (
+        <Section title="Getting started">
+          <Welcome onContinue={() => {
+            setPhase(2);
+          }} />
+        </Section>
+      );
+
+    case 2:
+      return (
+        <Section title="Super Giggle!">
+          <Giggle />
+        </Section>
+      );
+
+  }
+
   return (
     <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'}/>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
-        <Header />
+        <Header/>
         <View
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+          {PhaseView(phase)}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -92,7 +99,7 @@ const App: () => Node = () => {
 
 const styles = StyleSheet.create({
   sectionContainer: {
-    marginTop: 32,
+    marginTop: 64,
     paddingHorizontal: 24,
   },
   sectionTitle: {

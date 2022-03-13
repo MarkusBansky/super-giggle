@@ -9,13 +9,13 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-
 import {
   Colors,
   Header,
 } from 'react-native/Libraries/NewAppScreen';
 import Welcome from "./views/Welcome";
 import Giggle from "./views/Giggle";
+import VpnSetup from "./views/VpnSetup";
 
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -43,22 +43,7 @@ const Section = ({children, title}): Node => {
   );
 };
 
-const PhaseView: (phase: number) => Node = (phase) => {
-  switch (phase) {
-    case 1:
-    default:
-      return
-  }
-}
-
-const App: () => Node = () => {
-  const [phase, setPhase] = useState(1);
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
+const PhaseView: (phase: number, setPhase: (n: number) => void) => Node = (phase, setPhase) => {
   switch (phase) {
     case 1:
     default:
@@ -72,12 +57,30 @@ const App: () => Node = () => {
 
     case 2:
       return (
+        <Section title="Setup VPN">
+          <VpnSetup onContinue={() => {
+            setPhase(3);
+          }} />
+        </Section>
+      );
+
+    case 3:
+      return (
         <Section title="Super Giggle!">
           <Giggle />
         </Section>
       );
 
   }
+}
+
+const App: () => Node = () => {
+  const [phase, setPhase] = useState(1);
+  const isDarkMode = useColorScheme() === 'dark';
+
+  const backgroundStyle = {
+    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  };
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -90,7 +93,7 @@ const App: () => Node = () => {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          {PhaseView(phase)}
+          {PhaseView(phase, setPhase)}
         </View>
       </ScrollView>
     </SafeAreaView>
